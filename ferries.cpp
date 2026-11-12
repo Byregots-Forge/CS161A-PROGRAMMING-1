@@ -1,7 +1,7 @@
 // --------------------- File Header ---------------------------------
 // Author : Jared Hillaire
 // Assignment : Assignment 3 - Conditional Branching
-// Date : October 22, 2026 - November 4th, 2026
+// Date : November, 11, 2026
 // Citations : OpenAI ChatGPT - tutoring and code explanation.
 // All code is writen by me, AI is only used for resource and understanding.
 
@@ -9,9 +9,182 @@
 
 #include <iostream>
 #include <iomanip>
-#include <cctype>
+#include <string>
+#include <cmath>
 
+using namespace std;
 
+// Check for extra characters after the answer on the same line.
+// Spaces and tabs are allowed; text such as ".5" or "abc" is not.
+bool hasExtraInput()
+{
+    string extraInput;
+    getline( cin, extraInput);
+
+    return extraInput.find_first_not_of (" \t\r") != string::npos;
+}
+
+// Calculate a group's ferry fare and free-ticket eligibility.
+int main()
+{
+
+    const double VEHICLE_FARE = 57.90;
+    const double ADULT_FARE = 14.95;
+    const double SENIOR_FARE = 7.40;
+    const double YOUTH_FARE = 5.55;
+    const double BIKE_FARE = 4.00;
+    const double FREE_TICKET_THRESHOLD = 100.00;
+    const int MAX_GROUP_SIZE = 20;
+
+    char vehicleAnswer = ' ';
+    int adultCount = 0;
+    int seniorCount = 0;
+    int youthCount = 0;
+    int bikeCount = 0;
+
+    double totalCharge = 0.0;
+    double amountNeeded = 0.0;
+
+    bool inputValid = true;
+
+    // Display the welcome message and fare menu.
+    cout << "Welcome to the Washington State Ferries Fare Calculator!\n\n";
+
+    cout << left << setw(59) << "Fare Description"
+         << "Ticket $\n";
+    cout << setw(59) << "--------------------------------------"
+         << "--------\n";
+
+    cout << fixed << setprecision(2);
+
+    cout <<setw(59) << "Vehicle Under 14' (less than 168\") & Driver"
+         << "$" << VEHICLE_FARE << "\n";
+    
+    cout << setw(59) << "Adult (age 19 - 64)"
+         << "$" << ADULT_FARE << "\n";
+    
+    cout << setw(59) << "Senior (age 65 & over) / Disability"
+         << "$" << SENIOR_FARE << "\n";
+
+    cout << setw(59) << "Youth (age 6 - 18)"
+         << "$" << YOUTH_FARE << "\n";
+    
+    cout << setw(59) << "Bicycle Surcharge (included with Vehicle)"
+         << "$" << BIKE_FARE << "\n";
+        
+    // Read and validate the vehicle answer.
+    cout << "\nAre you riding a vehicle on the Ferry (Y/N): ";
+    cin >> vehicleAnswer;
+
+    if (!cin ||
+        (vehicleAnswer != 'y' && vehicleAnswer != 'Y' &&
+         vehicleAnswer != 'n' && vehicleAnswer != 'N') ||
+        hasExtraInput())
+    {
+        inputValid = false;
+    }
+    
+    // Read each count only if previous input was valid.
+    if (inputValid)
+       {
+        cout << "\nHow many adults? ";
+        cin >> adultCount;
+
+        if (!cin || adultCount < 0 || hasExtraInput())
+        {
+            inputValid = false;
+        }
+    }
+
+    if (inputValid)
+    {
+        cout << "How many seniors? ";
+        cin >> seniorCount;
+
+        if (!cin || seniorCount < 0 || hasExtraInput())
+        {
+            inputValid = false;
+        }
+    }
+
+    if (inputValid)
+    {
+        cout << "How many youths? ";
+        cin >> youthCount;
+
+        if (!cin || youthCount < 0 || hasExtraInput())
+        {
+            inputValid = false;
+        }
+    }
+
+    // The vehicle fare already includes bicycles.
+    if (inputValid &&
+        (vehicleAnswer == 'n' || vehicleAnswer == 'N'))
+    {
+        cout << "How many bikes? ";
+        cin >> bikeCount;
+
+        if (!cin || bikeCount < 0 || hasExtraInput())
+        {
+            inputValid = false;
+        }
+    }
+
+    // Handle errors before calculating a fare.
+    if (!inputValid)
+    {
+        cout << "\nError!! Invalid answer!! Please try again later!!!\n";
+    }
+    else if (adultCount > MAX_GROUP_SIZE ||
+             seniorCount > MAX_GROUP_SIZE ||
+             youthCount > MAX_GROUP_SIZE ||
+             adultCount + seniorCount + youthCount > MAX_GROUP_SIZE)
+    {
+        cout << "\nUh oh!! Too many people in your group. "
+             << "Split into 2 groups and try again!\n";
+    }
+    else
+    {
+        totalCharge = adultCount * ADULT_FARE
+                    + seniorCount * SENIOR_FARE
+                    + youthCount * YOUTH_FARE;
+
+        if (vehicleAnswer == 'y' || vehicleAnswer == 'Y')
+        {
+            totalCharge = totalCharge + VEHICLE_FARE;
+        }
+        else
+        {
+            totalCharge = totalCharge + bikeCount * BIKE_FARE;
+        }
+
+        // Round to cents before comparing the total with $100.
+        totalCharge = round(totalCharge * 100.0) / 100.0;
+
+        cout << "\nYour total charge is $" << totalCharge << "\n";
+
+        if (totalCharge > FREE_TICKET_THRESHOLD)
+        {
+            cout << "\nYou are eligible for a free adult ticket "
+                 << "for the next trip.\n";
+        }
+        else
+        {
+            amountNeeded = FREE_TICKET_THRESHOLD - totalCharge;
+
+            cout << "\nIf you spend $" << amountNeeded
+                 << " more, you are eligible for a free adult ticket "
+                 << "for the next trip.\n";
+        }
+    }
+
+    // Display the goodbye message for both valid and invalid input.
+    cout << "\nThank you for using Washington State Ferries "
+         << "Fare Calculator!\n";
+
+    return 0;
+}
 
 
 // ------------------------ Design ------------------------------------
