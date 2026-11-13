@@ -1,0 +1,21 @@
+Script started on 2026-11-13 12:09:04+00:00 [COMMAND="./pizzaparty" TERM="xterm-256color" TTY="/dev/pts/1" COLUMNS="178" LINES="10"]
+Welcome to my Pizza Party Statistics program!
+
+Enter the number of people, average number of slices per person, and the cost of a pizza separated by a space: 4 2.1 10.00 n
+
+Number of pizzas: 2
+Cost of pizzas:  $20.00
+Tax:             $1.40
+Delivery:        $4.28
+Total Cost:      $25.68
+
+Do you want to enter more (y/n): 
+Number of entries: 1
+Total number of pizzas: 2
+Average number of pizzas: 2.0
+Maximum number of people: 4
+Maximum cost of pizzas: $25.68
+
+Thank you for using my program!
+
+Script done on 2026-11-13 12:09:17+00:00 [COMMAND_EXIT_CODE="0"]
